@@ -1,6 +1,7 @@
 package com.example.gongdon.user.service;
 
 import com.example.gongdon.user.domain.User;
+import com.example.gongdon.user.dto.SigninRequest;
 import com.example.gongdon.user.dto.SignupRequest;
 import com.example.gongdon.user.dto.UserDto;
 import com.example.gongdon.user.repository.UserRepository;
@@ -12,11 +13,25 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
 
+//    public UserDto singIn(SigninRequest userDto) {
+//
+//
+//        return new UserDto();
+//    }
+
     public UserDto signUp(SignupRequest userDto) {
 
+        // Email 중복 검사
         User emailCheck = userRepository.findByEmail(userDto.getEmail());
 
         if (emailCheck != null) {
+            return null;
+        }
+
+        // Name 중복 검사
+        User nameCheck = userRepository.findByName(userDto.getName());
+
+        if (nameCheck != null) {
             return null;
         }
 
@@ -30,4 +45,5 @@ public class UserService {
         userRepository.save(user);
         return new UserDto(user);
     }
+
 }
