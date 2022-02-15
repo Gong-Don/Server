@@ -30,4 +30,16 @@ public class UserRepository {
             return null;
         }
     }
+
+    @Transactional(readOnly = true)
+    public User findByName(String name) {
+        System.out.println("name : " + name);
+        try {
+            return em.createQuery("select u from User u where u.name = :name", User.class)
+                    .setParameter("name", name)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 }

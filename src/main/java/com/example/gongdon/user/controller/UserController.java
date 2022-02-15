@@ -1,5 +1,6 @@
 package com.example.gongdon.user.controller;
 
+import com.example.gongdon.user.dto.SigninRequest;
 import com.example.gongdon.user.dto.SignupRequest;
 import com.example.gongdon.user.dto.UserDto;
 import com.example.gongdon.user.service.UserService;
@@ -25,4 +26,13 @@ public class UserController {
 
         return userService.signUp(req);
     }
+
+//    @PostMapping("/api/user/signin")
+//    public UserDto signin(@RequestBody @Valid SigninRequest req, Errors errors) {
+//        if (errors.hasErrors()) {
+//            return null;
+//        }
+//
+//        return userService.signIn(req);
+//    }
 }
