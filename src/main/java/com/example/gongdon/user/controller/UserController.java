@@ -27,12 +27,12 @@ public class UserController {
         return userService.signUp(req);
     }
 
-//    @PostMapping("/api/user/signin")
-//    public UserDto signin(@RequestBody @Valid SigninRequest req, Errors errors) {
-//        if (errors.hasErrors()) {
-//            return null;
-//        }
-//
-//        return userService.signIn(req);
-//    }
+    @PostMapping("/api/user/signin")
+    public UserDto signin(@RequestBody @Valid SigninRequest req, Errors errors) {
+        if (errors.hasErrors()) {
+            return null;
+        }
+
+        return userService.signIn(req);
+    }
 }

@@ -13,11 +13,20 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
 
-//    public UserDto singIn(SigninRequest userDto) {
-//
-//
-//        return new UserDto();
-//    }
+    public UserDto signIn(SigninRequest userDto) {
+        User user = userRepository.findByEmail(userDto.getEmail());
+        if (user == null) {
+            return null;
+        }
+
+        // 사용자 입력 비밀번호와 DB 저장된 사용자의 비밀번호 일치 여부 검사
+        // 로그인 상태 저장 방식이 확정되면 수정
+        if (user.getPassword().equals(userDto.getPassword())) {
+            return new UserDto(user);
+        }
+
+        return null;
+    }
 
     public UserDto signUp(SignupRequest userDto) {
 
