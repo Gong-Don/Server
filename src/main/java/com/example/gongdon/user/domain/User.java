@@ -35,4 +35,8 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.userType = UserType.ENTERPRISE;
     }
+
+    public boolean matchPassword(String password) {
+        return this.password.equals(password);
+    }
 }
