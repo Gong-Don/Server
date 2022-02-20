@@ -2,6 +2,7 @@ HELP.md
 Icon
 Icon\r
 .gradle
+**/.DS_Store
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
