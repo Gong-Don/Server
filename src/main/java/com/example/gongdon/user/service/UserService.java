@@ -33,7 +33,6 @@ public class UserService {
                 .name(userDto.getName())
                 .email(userDto.getEmail())
                 .password(userDto.getPassword())
-                .phoneNumber(userDto.getPhoneNumber())
                 .build();
 
         userRepository.save(user);

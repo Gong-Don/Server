@@ -22,17 +22,14 @@ public class User {
 
     private String password;
 
-    private String phoneNumber;
-
     @Enumerated(EnumType.STRING)
     private UserType userType;
 
     @Builder
-    public User(String name, String email, String password, String phoneNumber) {
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.phoneNumber = phoneNumber;
         this.userType = UserType.ENTERPRISE;
     }
 
