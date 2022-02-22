@@ -10,27 +10,32 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(AlreadyExistEmailException.class)
-    ResponseEntity<String> handleAlreadyExistEmail(AlreadyExistEmailException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    ResponseEntity<ErrorResponse> handleAlreadyExistEmail(AlreadyExistEmailException ex) {
+        final ErrorResponse response = ErrorResponse.of(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(AlreadyExistNameException.class)
-    ResponseEntity<String> handleAlreadyExistName(AlreadyExistNameException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    ResponseEntity<ErrorResponse> handleAlreadyExistName(AlreadyExistNameException ex) {
+        final ErrorResponse response = ErrorResponse.of(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NotExistUserException.class)
-    ResponseEntity<String> handleNotRegisteredUser(NotExistUserException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    ResponseEntity<ErrorResponse> handleNotRegisteredUser(NotExistUserException ex) {
+        final ErrorResponse response = ErrorResponse.of(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NotMatchPasswordException.class)
-    ResponseEntity<String> handleNotMatchPassword(NotMatchPasswordException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    ResponseEntity<ErrorResponse> handleNotMatchPassword(NotMatchPasswordException ex) {
+        final ErrorResponse response = ErrorResponse.of(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
     ResponseEntity handleException(Exception ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        final ErrorResponse response = ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
