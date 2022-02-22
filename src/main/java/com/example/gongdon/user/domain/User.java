@@ -1,6 +1,5 @@
 package com.example.gongdon.user.domain;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,17 +22,19 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private UserType userType;
+    private UserType userType = UserType.ENTERPRISE;
 
-    @Builder
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.userType = UserType.ENTERPRISE;
     }
 
     public boolean matchPassword(String password) {
         return this.password.equals(password);
+    }
+
+    public boolean isStudent(UserType userType) {
+        return userType == UserType.STUDENT;
     }
 }
