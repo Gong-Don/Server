@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://choco-one.iptime.org:33306/GongDon?autoReconnect=true
+    username: one
+    password: wodnjs13
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+  profiles:
+    active: local
+server:
+  port: 8080
+
+---
+spring:
+  config:
+    activate:
+      on-profile: set1
+server:
+  port: 8081
+
+---
+spring:
+  config:
+    activate:
+      on-profile: set2
+server:
+  port: 8082
