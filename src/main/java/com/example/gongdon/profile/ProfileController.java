@@ -6,14 +6,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class WebRestController {
+public class ProfileController {
     private final Environment env;
 
     @GetMapping("/profile")
     public String getProfile(){
-        return Arrays.stream(env.getActiveProfiles()).findFirst().orElse("");
+        List<String> profiles = Arrays.asList(env.getActiveProfiles());
+        List<String> prodProfiles = Arrays.asList("set1", "set2");
+        String defaultProfile = profiles.get(0);
+
+        System.out.println(defaultProfile);
+        return Arrays.stream(env.getActiveProfiles()).filter(prodProfiles::contains).findAny().orElse(defaultProfile);
     }
 }
