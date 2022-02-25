@@ -1,9 +1,6 @@
 package com.example.gongdon.errors;
 
-import com.example.gongdon.errors.exception.AlreadyExistEmailException;
-import com.example.gongdon.errors.exception.AlreadyExistNameException;
-import com.example.gongdon.errors.exception.NotExistUserException;
-import com.example.gongdon.errors.exception.NotMatchPasswordException;
+import com.example.gongdon.errors.exception.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +30,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotMatchPasswordException.class)
     ResponseEntity<ErrorResponse> handleNotMatchPassword(NotMatchPasswordException ex) {
+        final ErrorResponse response = ErrorResponse.of(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    ResponseEntity<ErrorResponse> handleInvalidToken(InvalidTokenException ex) {
         final ErrorResponse response = ErrorResponse.of(HttpStatus.BAD_REQUEST, ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
