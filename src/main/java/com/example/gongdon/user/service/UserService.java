@@ -3,12 +3,16 @@ package com.example.gongdon.user.service;
 import com.example.gongdon.errors.exception.*;
 import com.example.gongdon.user.domain.Token;
 import com.example.gongdon.user.domain.User;
-import com.example.gongdon.user.dto.EmailAuthRequest;
-import com.example.gongdon.user.dto.SigninRequest;
-import com.example.gongdon.user.dto.SignupRequest;
+import com.example.gongdon.user.dto.Request.EmailAuthRequest;
+import com.example.gongdon.user.dto.Request.SigninRequest;
+import com.example.gongdon.user.dto.Request.SignupRequest;
+import com.example.gongdon.user.dto.Response.EmailAuthResponse;
+import com.example.gongdon.user.dto.Response.SigninResponse;
+import com.example.gongdon.user.dto.Response.SignupResponse;
 import com.example.gongdon.user.repository.TokenRepository;
 import com.example.gongdon.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +27,7 @@ public class UserService {
     private final TokenService tokenService;
 
     @Transactional
-    public Long signUp(SignupRequest request) {
+    public SignupResponse signUp(SignupRequest request) {
 
         // DB에 해당 Name 을 가진 사용자 조회
         if(userRepository.findByName(request.getName()).isPresent())
@@ -41,11 +45,11 @@ public class UserService {
 
         userRepository.save(user);
 
-        return user.getUserId();
+        return SignupResponse.of(HttpStatus.OK, "회원가입이 정상적으로 처리되었습니다.");
     }
 
     @Transactional
-    public Long signIn(SigninRequest request) {
+    public SigninResponse signIn(SigninRequest request) {
         // DB에 해당 Email 을 가진 사용자 조회
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() ->
                 new NotExistUserException());
@@ -55,19 +59,18 @@ public class UserService {
         if (!user.matchPassword(request.getPassword()))
             throw new NotMatchPasswordException();
 
-        return user.getUserId();
+        return new SigninResponse(user.getUserId());
     }
 
     @Transactional
-    public String emailAuth(EmailAuthRequest request) {
+    public EmailAuthResponse emailAuth(EmailAuthRequest request) {
 
         // DB에 해당 Email 을 가진 사용자 조회
-        if(userRepository.findByEmail(request.getEmail()).isPresent())
+        if (userRepository.findByEmail(request.getEmail()).isPresent())
             throw new AlreadyExistEmailException();
 
-        String tokenId = tokenService.createEmailConfirmationToken(request.getEmail());
-
-        return tokenId;
+        // tokenId를 반환
+        return new EmailAuthResponse(tokenService.createEmailConfirmationToken(request.getEmail()));
     }
 
     @Transactional

@@ -1,4 +1,4 @@
-package com.example.gongdon.user.dto;
+package com.example.gongdon.user.dto.Request;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

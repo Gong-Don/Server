@@ -1,4 +1,4 @@
-package com.example.gongdon.user.dto;
+package com.example.gongdon.user.dto.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,6 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-@AllArgsConstructor
 @Data
 public class SigninRequest {
     @NotBlank(message = "이메일은 필수 입력 값입니다.")
