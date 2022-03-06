@@ -1,11 +1,11 @@
 package com.example.gongdon.user.controller;
 
+import com.example.gongdon.errors.SuccessResponse;
 import com.example.gongdon.user.dto.Request.EmailAuthRequest;
 import com.example.gongdon.user.dto.Request.SigninRequest;
 import com.example.gongdon.user.dto.Request.SignupRequest;
 import com.example.gongdon.user.dto.Response.EmailAuthResponse;
 import com.example.gongdon.user.dto.Response.SigninResponse;
-import com.example.gongdon.user.dto.Response.SignupResponse;
 import com.example.gongdon.user.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class UserController {
 
     @ApiOperation(value="회원가입", notes="회원가입 클릭 시 code와 message 반환")
     @PostMapping("/api/user/signup")
-    public SignupResponse signup(@RequestBody @Valid SignupRequest req) {
+    public SuccessResponse signup(@RequestBody @Valid SignupRequest req) {
         return userService.signUp(req);
     }
 
