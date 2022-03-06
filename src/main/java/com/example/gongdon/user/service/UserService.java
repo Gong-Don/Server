@@ -1,5 +1,6 @@
 package com.example.gongdon.user.service;
 
+import com.example.gongdon.errors.SuccessResponse;
 import com.example.gongdon.errors.exception.*;
 import com.example.gongdon.user.domain.Token;
 import com.example.gongdon.user.domain.User;
@@ -8,7 +9,6 @@ import com.example.gongdon.user.dto.Request.SigninRequest;
 import com.example.gongdon.user.dto.Request.SignupRequest;
 import com.example.gongdon.user.dto.Response.EmailAuthResponse;
 import com.example.gongdon.user.dto.Response.SigninResponse;
-import com.example.gongdon.user.dto.Response.SignupResponse;
 import com.example.gongdon.user.repository.TokenRepository;
 import com.example.gongdon.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class UserService {
     private final TokenService tokenService;
 
     @Transactional
-    public SignupResponse signUp(SignupRequest request) {
+    public SuccessResponse signUp(SignupRequest request) {
 
         // DB에 해당 Name 을 가진 사용자 조회
         if(userRepository.findByName(request.getName()).isPresent())
@@ -45,7 +45,7 @@ public class UserService {
 
         userRepository.save(user);
 
-        return SignupResponse.of(HttpStatus.OK, "회원가입이 정상적으로 처리되었습니다.");
+        return SuccessResponse.of(HttpStatus.OK, "회원가입이 정상적으로 처리되었습니다.");
     }
 
     @Transactional
