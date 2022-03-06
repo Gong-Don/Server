@@ -4,9 +4,7 @@ import com.example.gongdon.errors.SuccessResponse;
 import com.example.gongdon.errors.exception.*;
 import com.example.gongdon.user.domain.Token;
 import com.example.gongdon.user.domain.User;
-import com.example.gongdon.user.dto.Request.EmailAuthRequest;
-import com.example.gongdon.user.dto.Request.SigninRequest;
-import com.example.gongdon.user.dto.Request.SignupRequest;
+import com.example.gongdon.user.dto.Request.*;
 import com.example.gongdon.user.dto.Response.EmailAuthResponse;
 import com.example.gongdon.user.dto.Response.SigninResponse;
 import com.example.gongdon.user.repository.TokenRepository;
@@ -50,6 +48,7 @@ public class UserService {
 
     @Transactional
     public SigninResponse signIn(SigninRequest request) {
+
         // DB에 해당 Email 을 가진 사용자 조회
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() ->
                 new NotExistUserException());
@@ -75,8 +74,8 @@ public class UserService {
 
     @Transactional
     public String confirmEmail(String tokenId) {
-        // 사용자가 이메일로 보내진 링크를 클릭했을때 토큰의 유효성을 검사한후 결과 리턴
 
+        // 사용자가 이메일로 보내진 링크를 클릭했을때 토큰의 유효성을 검사한후 결과 리턴
         Optional<Token> token = tokenRepository.findById(tokenId);
 
         if(token.isEmpty())
@@ -90,5 +89,37 @@ public class UserService {
         tokenRepository.save(token.get());
 
         return "AuthSuccess";
+    }
+
+    @Transactional
+    public SuccessResponse updateName(UpdateNameRequest request) {
+
+        // DB에 해당 Name 을 가진 사용자 조회
+        if(userRepository.findByName(request.getName()).isPresent())
+            throw new AlreadyExistNameException();
+
+        User user = userRepository.findByUserId(request.getUserId()).orElseThrow(() ->
+                new NotExistUserException());
+
+        user.updateName(request.getName());
+        userRepository.save(user);
+
+        return SuccessResponse.of(HttpStatus.OK, "닉네임이 변경되었습니다.");
+    }
+
+    @Transactional
+    public SuccessResponse updatePassword(UpdatePasswordRequest request) {
+
+        User user = userRepository.findByUserId(request.getUserId()).orElseThrow(() ->
+                new NotExistUserException());
+
+        // 현재 비밀번호와 새로운 비밀번호가 같은지 검사
+        if(user.matchPassword(request.getPassword()))
+            throw new SamePasswordException();
+
+        user.updatePassword(request.getPassword());
+        userRepository.save(user);
+
+        return SuccessResponse.of(HttpStatus.OK, "비밀번호가 변경되었습니다.");
     }
 }

@@ -1,9 +1,7 @@
 package com.example.gongdon.user.controller;
 
 import com.example.gongdon.errors.SuccessResponse;
-import com.example.gongdon.user.dto.Request.EmailAuthRequest;
-import com.example.gongdon.user.dto.Request.SigninRequest;
-import com.example.gongdon.user.dto.Request.SignupRequest;
+import com.example.gongdon.user.dto.Request.*;
 import com.example.gongdon.user.dto.Response.EmailAuthResponse;
 import com.example.gongdon.user.dto.Response.SigninResponse;
 import com.example.gongdon.user.service.UserService;
@@ -41,5 +39,17 @@ public class UserController {
     @GetMapping("/api/user/auth")
     public String confirmEmail(@RequestParam String tokenId) {
         return userService.confirmEmail(tokenId);
+    }
+
+    @ApiOperation(value="닉네임 변경", notes="수정 완료 클릭 시 code와 message 반환")
+    @PostMapping("/api/user/name")
+    public SuccessResponse updateName(@RequestBody @Valid UpdateNameRequest req) {
+        return userService.updateName(req);
+    }
+
+    @ApiOperation(value="비밀번호 변경", notes="수정 완료 클릭 시 code와 message 반환")
+    @PostMapping("/api/user/password")
+    public SuccessResponse updatePassword(@RequestBody @Valid UpdatePasswordRequest req) {
+        return userService.updatePassword(req);
     }
 }

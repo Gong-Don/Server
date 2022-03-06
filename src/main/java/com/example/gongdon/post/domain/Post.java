@@ -52,7 +52,7 @@ public class Post {
         this.likeCnt++;
     }
 
-    public void desLikeCnt() {
+    public void decLikeCnt() {
         this.likeCnt--;
     }
 }

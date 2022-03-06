@@ -34,6 +34,14 @@ public class User {
         return this.password.equals(password);
     }
 
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
+
     public boolean isStudent(UserType userType) {
         return userType == UserType.STUDENT;
     }
