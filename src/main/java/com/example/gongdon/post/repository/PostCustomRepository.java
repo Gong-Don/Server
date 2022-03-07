@@ -5,7 +5,8 @@ import com.example.gongdon.post.domain.Post;
 
 import java.util.List;
 
-public interface PostRepositoryCutsom {
-    List<Post> findByTitle(String title);
-    List<Post> findByCategory(Category category);
+public interface PostCustomRepository {
+    List<Post> getPosts();
+    List<Post> getPostsByTitle(String title);
+    List<Post> getPostsByCategory(Category category);
 }
