@@ -32,8 +32,7 @@ public class UserService {
             throw new AlreadyExistNameException();
 
         // 클라이언트에서 보낸 토큰아이디가 유효한지를 검사
-        Token token = tokenRepository.findById(request.getTokenId()).orElseThrow(() ->
-                new InvalidTokenException());
+        Token token = tokenRepository.findById(request.getTokenId()).orElseThrow(InvalidTokenException::new);
 
         // 이메일 인증이 완료되었는지를 확인
         if(!token.isExpired())
@@ -50,8 +49,7 @@ public class UserService {
     public SigninResponse signIn(SigninRequest request) {
 
         // DB에 해당 Email 을 가진 사용자 조회
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() ->
-                new NotExistUserException());
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(NotExistUserException::new);
 
         // 사용자 입력 비밀번호와 DB 저장된 사용자의 비밀번호 일치 여부 검사
         // 로그인 상태 저장 방식이 확정되면 수정
@@ -79,16 +77,16 @@ public class UserService {
         Optional<Token> token = tokenRepository.findById(tokenId);
 
         if(token.isEmpty())
-            return "AuthFailed";
+            return "/AuthFailed.html";
 
         // 시간이 만료되었는지 아닌지
         if (token.get().isCheckExpired())
-            return "AuthFailed";
+            return "/AuthFailed.html";
 
         token.get().usedToken();
         tokenRepository.save(token.get());
 
-        return "AuthSuccess";
+        return "/AuthSuccess.html";
     }
 
     @Transactional
@@ -98,8 +96,7 @@ public class UserService {
         if(userRepository.findByName(request.getName()).isPresent())
             throw new AlreadyExistNameException();
 
-        User user = userRepository.findByUserId(request.getUserId()).orElseThrow(() ->
-                new NotExistUserException());
+        User user = userRepository.findByUserId(request.getUserId()).orElseThrow(NotExistUserException::new);
 
         user.updateName(request.getName());
         userRepository.save(user);
@@ -110,8 +107,7 @@ public class UserService {
     @Transactional
     public SuccessResponse updatePassword(UpdatePasswordRequest request) {
 
-        User user = userRepository.findByUserId(request.getUserId()).orElseThrow(() ->
-                new NotExistUserException());
+        User user = userRepository.findByUserId(request.getUserId()).orElseThrow(NotExistUserException::new);
 
         // 현재 비밀번호와 새로운 비밀번호가 같은지 검사
         if(user.matchPassword(request.getPassword()))
