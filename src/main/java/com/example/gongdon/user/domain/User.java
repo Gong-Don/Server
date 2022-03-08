@@ -42,7 +42,7 @@ public class User {
         this.password = password;
     }
 
-    public boolean isStudent(UserType userType) {
-        return userType == UserType.STUDENT;
+    public boolean isStudent() {
+        return this.userType == UserType.STUDENT;
     }
 }

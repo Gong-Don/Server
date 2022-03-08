@@ -32,7 +32,7 @@ public class Token {
     private String receiverEmail;
 
     @Column
-    private boolean expired;
+    private boolean verification;
 
     @CreatedDate
     @Column(updatable = false)
@@ -46,21 +46,21 @@ public class Token {
 
 
     // 이메일 인증 토큰 생성
-    public static Token createToken(String receiverEmail) {
+    public static Token create(String receiverEmail) {
         Token confirmationToken = new Token();
         confirmationToken.receiverEmail = receiverEmail;
         confirmationToken.expirationDate = LocalDateTime.now().plusMinutes(EMAIL_TOKEN_EXPIRATION_TIME_VALUE); // 5분 후 만료
-        confirmationToken.expired = false;
+        confirmationToken.verification = false;
         return  confirmationToken;
     }
 
     // 토큰 사용으로 인한 만료
     public void usedToken() {
-        this.expired = true;
+        this.verification = true;
     }
 
     // 토큰 유효 기간 만료 여부 검사
-    public boolean isCheckExpired() {
+    public boolean checkExpired() {
         return LocalDateTime.now().isAfter(this.expirationDate);
     }
 }

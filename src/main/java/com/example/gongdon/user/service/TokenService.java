@@ -15,7 +15,7 @@ public class TokenService {
 
     // 이메일 인증 토큰 생성
     public String createEmailConfirmationToken(String receiverEmail) {
-        Token token = Token.createToken(receiverEmail);
+        Token token = Token.create(receiverEmail);
         tokenRepository.save(token);
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
