@@ -1,6 +1,5 @@
 package com.example.gongdon.post.repository;
 
-import com.example.gongdon.post.domain.Category;
 import com.example.gongdon.post.domain.Post;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -29,17 +28,12 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         return find().where(post.title.contains(title)).fetch();
     }
 
-    // 카테고리명이 일치하는 post 반환
-    @Override
-    public List<Post> getPostsByCategory(Category category) {
-        return find().where(post.category.eq(category)).fetch();
-    }
-
     private JPAQuery<Post> find(){
         return jpaQueryFactory
                 .select(Projections.constructor(Post.class,
                         post.postId,
                         post.wrtId,
+                        post.wrtName,
                         post.category,
                         post.title,
                         post.content,
