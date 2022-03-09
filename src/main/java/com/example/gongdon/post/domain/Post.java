@@ -26,6 +26,8 @@ public class Post {
 
     private Long wrtId;
 
+    private String wrtName;
+
     @Enumerated(EnumType.STRING)
     private Category category;
 
@@ -41,16 +43,17 @@ public class Post {
     @Column(updatable = false)
     private LocalDateTime date;
 
+    public Post (Long wrtId, String wrtName, Category category, String title, String content, int price) {
+        this.wrtId = wrtId;
+        this.wrtName = wrtName;
+        this.category = category;
+        this.title = title;
+        this.content = content;
+        this.price = price;
+    }
+
     // 외주 매칭이 완료되면, status(상태)를 TRUE로 변경
     private boolean matchingStatus = false;
-
-    public Post(CreateRequest request) {
-        this.wrtId = request.getWrtId();
-        this.category = request.getCategory();
-        this.title = request.getTitle();
-        this.content = request.getContent();
-        this.price = request.getPrice();
-    }
 
     public void matchingComplete() {
         this.matchingStatus = true;
@@ -61,6 +64,6 @@ public class Post {
     }
 
     public void decLikeCnt() {
-        this.likeCnt--;
+        if (this.likeCnt > 0) this.likeCnt--;
     }
 }

@@ -8,5 +8,4 @@ import java.util.List;
 public interface PostCustomRepository {
     List<Post> getPosts();
     List<Post> getPostsByTitle(String title);
-    List<Post> getPostsByCategory(Category category);
 }
