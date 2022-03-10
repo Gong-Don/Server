@@ -14,7 +14,7 @@ public class TokenService {
     private final EmailService emailService;
 
     // 이메일 인증 토큰 생성
-    public String createEmailConfirmationToken(String receiverEmail) {
+    public String createToken(String receiverEmail) {
         Token token = Token.create(receiverEmail);
         tokenRepository.save(token);
 

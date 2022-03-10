@@ -34,7 +34,7 @@ public class PostService {
         // TODO NotExistUserException이 의미상 알맞은 것 같아서 사용 중인데 에러 메시지가 맞지 않는 문제
         Optional<User> user = Optional.ofNullable(userRepository.findByUserId(request.getWrtId()).orElseThrow(NotExistUserException::new));
         // user.ifPresent(value -> post.setWrtName(value.getName()));
-        log.info("사용자 이름 : {}", user.get().getName());
+        log.info("Post 생성 요청, 사용자 이름 : {}", user.get().getName());
 
         Post post = new Post(request.getWrtId(), user.get().getName(), request.getCategory(), request.getTitle(), request.getContent(), request.getPrice());
         postRepository.save(post);
@@ -45,6 +45,7 @@ public class PostService {
     @Transactional
     public SuccessResponse delete(Long postId) {
         log.info("Post 삭제 요청");
+
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         postRepository.delete(post);
         return SuccessResponse.of(HttpStatus.OK, "글이 정상적으로 삭제되었습니다.");
@@ -53,25 +54,30 @@ public class PostService {
     @Transactional
     public SuccessResponse update(Long postId, CreateRequest request) {
         log.info("Post 수정 요청");
+
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         postRepository.save(updateSetting(post, request));
         return SuccessResponse.of(HttpStatus.OK, "글이 정상적으로 수정되었습니다.");
     }
 
     @Transactional
-    public List<Post> showAll() {
+    public List<Post> lists() {
         log.info("Post 보기 요청");
+
         return postRepository.getPosts();
     }
 
     @Transactional
-    public List<Post> getPostsByTitle(String title) {
+    public List<Post> titleLists(String title) {
         log.info("Post 제목 검색 요청");
+
         return postRepository.getPostsByTitle(title);
     }
 
     @Transactional
-    public List<Post> getPostsByCategory(Category category) {
+    public List<Post> categoryLists(Category category) {
+        log.info("Post 카테고리 검색 요청");
+
         return postRepository.findPostByCategory(category);
     }
 
