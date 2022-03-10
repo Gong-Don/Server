@@ -68,6 +68,14 @@ public class PostService {
     }
 
     @Transactional
+    public Post detail(Long postId) {
+        log.info("특정 Post 보기 요청");
+
+        if (!postRepository.existsById(postId)) throw new PostNotFoundException();
+        return postRepository.findPostByPostId(postId);
+    }
+
+    @Transactional
     public List<Post> titleLists(String title) {
         log.info("Post 제목 검색 요청");
 
