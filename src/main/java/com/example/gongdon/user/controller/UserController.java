@@ -42,21 +42,21 @@ public class UserController {
 
     @ApiOperation(value="이메일 인증 링크 클릭", notes="이메일로 보낸 링크 클릭 시 결과화면 반환")
     @GetMapping("/auth")
-    public String confirmEmail(@RequestParam String tokenId) {
+    public String emailConfirm(@RequestParam String tokenId) {
         return userService.confirmEmail(tokenId);
     }
 
     @ResponseBody
     @ApiOperation(value="닉네임 변경", notes="수정 완료 클릭 시 code와 message 반환")
     @PutMapping("/name")
-    public SuccessResponse updateName(@RequestBody @Valid UpdateNameRequest req) {
-        return userService.updateName(req);
+    public SuccessResponse nameModify(@RequestBody @Valid UpdateNameRequest req) {
+        return userService.modifyName(req);
     }
 
     @ResponseBody
     @ApiOperation(value="비밀번호 변경", notes="수정 완료 클릭 시 code와 message 반환")
     @PutMapping("/password")
-    public SuccessResponse updatePassword(@RequestBody @Valid UpdatePasswordRequest req) {
-        return userService.updatePassword(req);
+    public SuccessResponse passwordModify(@RequestBody @Valid UpdatePasswordRequest req) {
+        return userService.modifyPassword(req);
     }
 }

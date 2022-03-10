@@ -59,7 +59,7 @@ public class UserService {
         // DB에 해당 Email 을 가진 사용자 조회
         isAlreadyExistEmail(request.getEmail());
         // tokenId를 반환
-        return new EmailAuthResponse(tokenService.createEmailConfirmationToken(request.getEmail()));
+        return new EmailAuthResponse(tokenService.createToken(request.getEmail()));
     }
 
     @Transactional
@@ -78,7 +78,7 @@ public class UserService {
     }
 
     @Transactional
-    public SuccessResponse updateName(UpdateNameRequest request) {
+    public SuccessResponse modifyName(UpdateNameRequest request) {
 
         // DB에 해당 Name 을 가진 사용자 조회
         isAlreadyExistName(request.getName());
@@ -93,7 +93,7 @@ public class UserService {
     }
 
     @Transactional
-    public SuccessResponse updatePassword(UpdatePasswordRequest request) {
+    public SuccessResponse modifyPassword(UpdatePasswordRequest request) {
 
         User user = userRepository.findByUserId(request.getUserId()).orElseThrow(NotExistUserException::new);
 
