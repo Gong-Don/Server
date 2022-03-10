@@ -54,6 +54,14 @@ public class PostController {
         return postService.create(request);
     }
 
+    @ApiOperation(value="글 하나 보기", notes="성공 시 해당 post 반환")
+    @GetMapping("/{postId}")
+    public Post postDetails(@PathVariable("postId") Long postId) {
+        log.info("특정 글 보기 요청");
+
+        return postService.detail(postId);
+    }
+
     @ApiOperation(value="글 삭제", notes="성공 시 code와 message 반환")
     @DeleteMapping("/{postId}")
     public SuccessResponse postRemove(@PathVariable("postId") Long postId) {
