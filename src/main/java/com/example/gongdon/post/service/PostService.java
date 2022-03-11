@@ -2,6 +2,7 @@ package com.example.gongdon.post.service;
 
 import com.example.gongdon.errors.SuccessResponse;
 import com.example.gongdon.errors.exception.NotExistUserException;
+import com.example.gongdon.errors.exception.NotExistWriterException;
 import com.example.gongdon.errors.exception.PostNotFoundException;
 import com.example.gongdon.post.domain.Category;
 import com.example.gongdon.post.domain.Post;
@@ -31,9 +32,9 @@ public class PostService {
     @Transactional
     public SuccessResponse create(CreateRequest request) {
         // TODO TAG가 추가되면, TAG가 비었는지 확인하는 로직
-        // TODO NotExistUserException이 의미상 알맞은 것 같아서 사용 중인데 에러 메시지가 맞지 않는 문제
-        Optional<User> user = Optional.ofNullable(userRepository.findByUserId(request.getWrtId()).orElseThrow(NotExistUserException::new));
-        // user.ifPresent(value -> post.setWrtName(value.getName()));
+
+        Optional<User> user = Optional.ofNullable(userRepository.findByUserId(request.getWrtId()).orElseThrow(NotExistWriterException::new));
+
         log.info("Post 생성 요청, 사용자 이름 : {}", user.get().getName());
 
         Post post = new Post(request.getWrtId(), user.get().getName(), request.getCategory(), request.getTitle(), request.getContent(), request.getPrice());
