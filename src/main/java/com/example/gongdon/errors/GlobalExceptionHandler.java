@@ -45,6 +45,11 @@ public class GlobalExceptionHandler {
         return handleBadRequest(ex);
     }
 
+    @ExceptionHandler(NotExistWriterException.class)
+    ResponseEntity<ErrorResponse> handleNotExistWriter(NotExistWriterException ex) {
+        return handleBadRequest(ex);
+    }
+
     @ExceptionHandler(Exception.class)
     ResponseEntity handleException(Exception ex) {
         return handleInternalServerError(ex);
