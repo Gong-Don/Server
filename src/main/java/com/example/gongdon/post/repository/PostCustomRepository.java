@@ -1,6 +1,5 @@
 package com.example.gongdon.post.repository;
 
-import com.example.gongdon.post.domain.Category;
 import com.example.gongdon.post.domain.Post;
 
 import java.util.List;

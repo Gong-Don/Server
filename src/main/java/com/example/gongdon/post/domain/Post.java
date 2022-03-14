@@ -1,6 +1,5 @@
 package com.example.gongdon.post.domain;
 
-import com.example.gongdon.post.dto.Request.CreateRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +32,7 @@ public class Post {
 
     private String title;
 
+    @Lob
     private String content;
 
     private int price;
@@ -43,6 +43,9 @@ public class Post {
     @Column(updatable = false)
     private LocalDateTime date;
 
+    // 외주 매칭이 완료되면, status(상태)를 TRUE로 변경
+    private boolean matchingStatus = false;
+
     public Post (Long wrtId, String wrtName, Category category, String title, String content, int price) {
         this.wrtId = wrtId;
         this.wrtName = wrtName;
@@ -51,9 +54,6 @@ public class Post {
         this.content = content;
         this.price = price;
     }
-
-    // 외주 매칭이 완료되면, status(상태)를 TRUE로 변경
-    private boolean matchingStatus = false;
 
     public void matchingComplete() {
         this.matchingStatus = true;
@@ -65,5 +65,14 @@ public class Post {
 
     public void decLikeCnt() {
         if (this.likeCnt > 0) this.likeCnt--;
+    }
+
+    public Post update(Category category, String title, String content, int price) {
+        this.category = category;
+        this.title = title;
+        this.content = content;
+        this.price = price;
+
+        return this;
     }
 }

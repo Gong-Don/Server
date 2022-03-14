@@ -8,8 +8,6 @@ import com.example.gongdon.post.service.PostService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -72,7 +70,7 @@ public class PostController {
 
     @ApiOperation(value="글 수정", notes="성공 시 code와 message 반환")
     @PutMapping("/{postId}")
-    public SuccessResponse postModify(@PathVariable("postId") Long postId, CreateRequest request) {
+    public SuccessResponse postModify(@PathVariable("postId") Long postId, @RequestBody @Valid CreateRequest request) {
         log.info("글 수정 요청");
 
         return postService.update(postId, request);
