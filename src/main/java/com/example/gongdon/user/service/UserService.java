@@ -1,6 +1,5 @@
 package com.example.gongdon.user.service;
 
-import com.example.gongdon.errors.SuccessResponse;
 import com.example.gongdon.errors.exception.*;
 import com.example.gongdon.user.domain.Token;
 import com.example.gongdon.user.domain.User;
@@ -11,7 +10,6 @@ import com.example.gongdon.user.repository.TokenRepository;
 import com.example.gongdon.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +25,7 @@ public class UserService {
     private final TokenService tokenService;
 
     @Transactional
-    public SuccessResponse signUp(SignupRequest request) {
+    public void signUp(SignupRequest request) {
 
         // DB에 해당 Email 을 가진 사용자 조회
         isAlreadyExistEmail(request.getEmail());
@@ -38,8 +36,6 @@ public class UserService {
 
         userRepository.save(new User(request.getName(), request.getEmail(), request.getPassword()));
         log.info("user <" + request.getName() + "> is inserted");
-
-        return SuccessResponse.of(HttpStatus.OK, "회원가입이 정상적으로 처리되었습니다.");
     }
 
     @Transactional
@@ -78,7 +74,7 @@ public class UserService {
     }
 
     @Transactional
-    public SuccessResponse modifyName(UpdateNameRequest request) {
+    public void modifyName(UpdateNameRequest request) {
 
         // DB에 해당 Name 을 가진 사용자 조회
         isAlreadyExistName(request.getName());
@@ -88,12 +84,10 @@ public class UserService {
         user.updateName(request.getName());
         userRepository.save(user);
         log.info("user <" + user.getName() + ">'name is updated");
-
-        return SuccessResponse.of(HttpStatus.OK, "닉네임이 변경되었습니다.");
     }
 
     @Transactional
-    public SuccessResponse modifyPassword(UpdatePasswordRequest request) {
+    public void modifyPassword(UpdatePasswordRequest request) {
 
         User user = userRepository.findByUserId(request.getUserId()).orElseThrow(NotExistUserException::new);
 
@@ -102,8 +96,6 @@ public class UserService {
         user.updatePassword(request.getPassword());
         userRepository.save(user);
         log.info("user <" + user.getName() + ">'password is updated");
-
-        return SuccessResponse.of(HttpStatus.OK, "비밀번호가 변경되었습니다.");
     }
 
     private void isAlreadyExistName(String name) {
