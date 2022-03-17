@@ -10,43 +10,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(AlreadyExistEmailException.class)
-    ResponseEntity<ErrorResponse> handleAlreadyExistEmail(AlreadyExistEmailException ex) {
-        return handleBadRequest(ex);
-    }
-
-    @ExceptionHandler(AlreadyExistNameException.class)
-    ResponseEntity<ErrorResponse> handleAlreadyExistName(AlreadyExistNameException ex) {
-        return handleBadRequest(ex);
-    }
-
-    @ExceptionHandler(NotExistUserException.class)
-    ResponseEntity<ErrorResponse> handleNotRegisteredUser(NotExistUserException ex) {
-        return handleBadRequest(ex);
-    }
-
-    @ExceptionHandler(NotMatchPasswordException.class)
-    ResponseEntity<ErrorResponse> handleNotMatchPassword(NotMatchPasswordException ex) {
-        return handleBadRequest(ex);
-    }
-
-    @ExceptionHandler(InvalidTokenException.class)
-    ResponseEntity<ErrorResponse> handleInvalidToken(InvalidTokenException ex) {
-        return handleBadRequest(ex);
-    }
-
-    @ExceptionHandler(SamePasswordException.class)
-    ResponseEntity<ErrorResponse> handleSamePassword(SamePasswordException ex) {
-        return handleBadRequest(ex);
-    }
-
-    @ExceptionHandler(PostNotFoundException.class)
-    ResponseEntity<ErrorResponse> handlePostNotFound(PostNotFoundException ex) {
-        return handleBadRequest(ex);
-    }
-
-    @ExceptionHandler(NotExistWriterException.class)
-    ResponseEntity<ErrorResponse> handleNotExistWriter(NotExistWriterException ex) {
+    @ExceptionHandler({AlreadyExistEmailException.class, AlreadyExistNameException.class, NotExistUserException.class,
+            NotMatchPasswordException.class, InvalidTokenException.class, SamePasswordException.class,
+            PostNotFoundException.class, NotExistWriterException.class})
+    ResponseEntity<ErrorResponse> handleBadRequestException(Exception ex) {
         return handleBadRequest(ex);
     }
 

@@ -8,15 +8,16 @@ import com.example.gongdon.post.service.PostService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @RequestMapping(value= "/api/post")
 @RestController
-@RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
 
@@ -48,8 +49,9 @@ public class PostController {
     @PostMapping()
     public SuccessResponse postAdd(@RequestBody @Valid CreateRequest request) {
         log.info("글 등록 요청");
+        postService.create(request);
 
-        return postService.create(request);
+        return SuccessResponse.of(HttpStatus.OK, "글이 정상적으로 등록되었습니다.");
     }
 
     @ApiOperation(value="글 하나 보기", notes="성공 시 해당 post 반환")
@@ -64,15 +66,17 @@ public class PostController {
     @DeleteMapping("/{postId}")
     public SuccessResponse postRemove(@PathVariable("postId") Long postId) {
         log.info("글 삭제 요청");
+        postService.delete(postId);
 
-        return postService.delete(postId);
+        return SuccessResponse.of(HttpStatus.OK, "글이 정상적으로 삭제되었습니다.");
     }
 
     @ApiOperation(value="글 수정", notes="성공 시 code와 message 반환")
     @PutMapping("/{postId}")
     public SuccessResponse postModify(@PathVariable("postId") Long postId, @RequestBody @Valid CreateRequest request) {
         log.info("글 수정 요청");
+        postService.update(postId, request);
 
-        return postService.update(postId, request);
+        return SuccessResponse.of(HttpStatus.OK, "글이 정상적으로 수정되었습니다.");
     }
 }

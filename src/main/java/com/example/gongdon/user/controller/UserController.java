@@ -7,6 +7,7 @@ import com.example.gongdon.user.dto.Response.SigninResponse;
 import com.example.gongdon.user.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +24,8 @@ public class UserController {
     @ApiOperation(value="회원가입", notes="회원가입 클릭 시 code와 message 반환")
     @PostMapping("/signup")
     public SuccessResponse signup(@RequestBody @Valid SignupRequest req) {
-        return userService.signUp(req);
+        userService.signUp(req);
+        return SuccessResponse.of(HttpStatus.OK, "회원가입이 정상적으로 처리되었습니다.");
     }
 
     @ResponseBody
@@ -50,13 +52,15 @@ public class UserController {
     @ApiOperation(value="닉네임 변경", notes="수정 완료 클릭 시 code와 message 반환")
     @PutMapping("/name")
     public SuccessResponse nameModify(@RequestBody @Valid UpdateNameRequest req) {
-        return userService.modifyName(req);
+        userService.modifyName(req);
+        return SuccessResponse.of(HttpStatus.OK, "닉네임이 변경되었습니다.");
     }
 
     @ResponseBody
     @ApiOperation(value="비밀번호 변경", notes="수정 완료 클릭 시 code와 message 반환")
     @PutMapping("/password")
     public SuccessResponse passwordModify(@RequestBody @Valid UpdatePasswordRequest req) {
-        return userService.modifyPassword(req);
+        userService.modifyPassword(req);
+        return SuccessResponse.of(HttpStatus.OK, "비밀번호가 변경되었습니다.");
     }
 }
