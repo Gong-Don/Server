@@ -3,7 +3,8 @@ package com.example.gongdon.post.controller;
 import com.example.gongdon.errors.SuccessResponse;
 import com.example.gongdon.post.domain.Category;
 import com.example.gongdon.post.domain.Post;
-import com.example.gongdon.post.dto.Request.CreateRequest;
+import com.example.gongdon.post.dto.request.CreateRequest;
+import com.example.gongdon.post.dto.response.DetailResponse;
 import com.example.gongdon.post.service.PostService;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.List;
 @RequestMapping(value= "/api/post")
 @RestController
 public class PostController {
+
     private final PostService postService;
 
     @ApiOperation(value="글 보기", notes="매칭되지 않은 모든 글 반환")
@@ -56,7 +58,7 @@ public class PostController {
 
     @ApiOperation(value="글 하나 보기", notes="성공 시 해당 post 반환")
     @GetMapping("/{postId}")
-    public Post postDetails(@PathVariable("postId") Long postId) {
+    public DetailResponse postDetails(@PathVariable("postId") Long postId) {
         log.info("특정 글 보기 요청");
 
         return postService.detail(postId);

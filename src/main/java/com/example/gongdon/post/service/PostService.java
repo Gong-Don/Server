@@ -4,8 +4,13 @@ import com.example.gongdon.errors.exception.NotExistWriterException;
 import com.example.gongdon.errors.exception.PostNotFoundException;
 import com.example.gongdon.post.domain.Category;
 import com.example.gongdon.post.domain.Post;
-import com.example.gongdon.post.dto.Request.CreateRequest;
+import com.example.gongdon.post.dto.request.CreateRequest;
+import com.example.gongdon.post.dto.response.DetailResponse;
 import com.example.gongdon.post.repository.PostRepository;
+import com.example.gongdon.tag.domain.BelongTo;
+import com.example.gongdon.tag.domain.Tag;
+import com.example.gongdon.tag.repository.BelongToRepository;
+import com.example.gongdon.tag.repository.TagRepository;
 import com.example.gongdon.user.domain.User;
 import com.example.gongdon.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,19 +26,24 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class PostService {
+
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final TagRepository tagRepository;
+    private final BelongToRepository belongToRepository;
 
     @Transactional
     public void create(CreateRequest request) {
-        // TODO TAG가 추가되면, TAG가 비었는지 확인하는 로직
 
         Optional<User> user = Optional.ofNullable(userRepository.findByUserId(request.getWrtId()).orElseThrow(NotExistWriterException::new));
 
         log.info("Post 생성 요청, 사용자 이름 : {}", user.get().getName());
 
         Post post = new Post(request.getWrtId(), user.get().getName(), request.getCategory(), request.getTitle(), request.getContent(), request.getPrice());
+
         postRepository.save(post);
+
+        createTag(request, post);
     }
 
     @Transactional
@@ -60,11 +71,12 @@ public class PostService {
     }
 
     @Transactional
-    public Post detail(Long postId) {
+    public DetailResponse detail(Long postId) {
         log.info("특정 Post 보기 요청");
 
         if (!postRepository.existsById(postId)) throw new PostNotFoundException();
-        return postRepository.findPostByPostId(postId);
+
+        return new DetailResponse(postRepository.findPostByPostId(postId) ,getTagList(belongToRepository.findByPost(postRepository.findPostByPostId(postId))));
     }
 
     @Transactional
@@ -79,5 +91,33 @@ public class PostService {
         log.info("Post 카테고리 검색 요청");
 
         return postRepository.findPostByCategory(category);
+    }
+
+    //
+    // private methods
+    //
+
+    private void createTag(CreateRequest request, Post post) {
+        if (request.getTags() != null  && !request.getTags().isEmpty())
+            for (String tagName : request.getTags()) {
+                Optional<Tag> tag = tagRepository.findByName(tagName);
+
+                // Tag 가 없으면 새로 생성
+                if(tag.isEmpty())
+                    tagRepository.save(new Tag(tagName));
+
+                // belongto 에 추가
+                belongToRepository.save(new BelongTo(post, tagRepository.findByName(tagName).get()));
+            }
+    }
+
+    private List<String> getTagList(List<BelongTo> belongTos) {
+
+        List<String> tags = new ArrayList<>();
+
+        for (BelongTo belongTo : belongTos)
+            tags.add(belongTo.getTag().getName());
+
+        return tags;
     }
 }
