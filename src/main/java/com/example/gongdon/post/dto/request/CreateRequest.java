@@ -1,10 +1,12 @@
-package com.example.gongdon.post.dto.Request;
+package com.example.gongdon.post.dto.request;
 
 import com.example.gongdon.post.domain.Category;
 import lombok.Data;
 
+import javax.annotation.Nullable;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 public class CreateRequest {
@@ -23,4 +25,7 @@ public class CreateRequest {
 
     @NotNull(message = "가격은 필수 입력 값입니다.")
     private int price;
+
+    @Nullable
+    private List<String> tags;
 }
