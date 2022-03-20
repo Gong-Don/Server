@@ -19,13 +19,13 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
     @Override
     public List<Post> getPosts() {
         // TODO matchingStatus가 false인 것만 가져오기
-        return find().where(post.matchingStatus.eq(false)).fetch();
+        return find().where(post.matchingStatus.eq(false)).orderBy(post.date.desc()).fetch();
     }
 
     // contains 함수로 검색어 포함여부를 확인하고 반환
     @Override
     public List<Post> getPostsByTitle(String title) {
-        return find().where(post.title.contains(title)).fetch();
+        return find().where(post.title.contains(title)).orderBy(post.date.desc()).fetch();
     }
 
     private JPAQuery<Post> find(){
