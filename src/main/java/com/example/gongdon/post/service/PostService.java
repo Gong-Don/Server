@@ -15,6 +15,7 @@ import com.example.gongdon.user.domain.User;
 import com.example.gongdon.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -90,7 +91,7 @@ public class PostService {
     public List<Post> categoryLists(Category category) {
         log.info("Post 카테고리 검색 요청");
 
-        return postRepository.findPostByCategory(category);
+        return postRepository.findPostByCategory(category, Sort.by(Sort.Direction.DESC, "date"));
     }
 
     //
