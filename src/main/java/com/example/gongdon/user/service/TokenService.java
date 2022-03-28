@@ -3,6 +3,7 @@ package com.example.gongdon.user.service;
 import com.example.gongdon.user.domain.Token;
 import com.example.gongdon.user.repository.TokenRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,8 @@ import java.util.Optional;
 @Service
 public class TokenService {
 
+    @Value("${url}")
+    private String url;
     private final TokenRepository tokenRepository;
     private final EmailService emailService;
 
@@ -25,7 +28,7 @@ public class TokenService {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(receiverEmail);
         mailMessage.setSubject("GONG-DON 회원가입 이메일 인증");
-        mailMessage.setText("http://choco-one.iptime.org:11104/api/user/auth?tokenId=" + token.getId());
+        mailMessage.setText(url + "/api/user/auth?tokenId=" + token.getId());
         emailService.sendEmail(mailMessage);
 
         return token.getId();
