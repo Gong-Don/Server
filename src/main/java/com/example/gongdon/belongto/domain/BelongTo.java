@@ -1,6 +1,7 @@
-package com.example.gongdon.tag.domain;
+package com.example.gongdon.belongto.domain;
 
 import com.example.gongdon.post.domain.Post;
+import com.example.gongdon.tag.domain.Tag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

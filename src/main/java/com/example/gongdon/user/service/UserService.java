@@ -21,7 +21,6 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final TokenRepository tokenRepository;
     private final TokenService tokenService;
 
     @Transactional
@@ -62,13 +61,13 @@ public class UserService {
     public String confirmEmail(String tokenId) {
 
         // 사용자가 이메일로 보내진 링크를 클릭했을때 토큰의 유효성을 검사한후 결과 리턴
-        Optional<Token> token = tokenRepository.findById(tokenId);
+        Optional<Token> token = tokenService.find(tokenId);
 
         if(!isValidToken(token))
             return "/AuthFailed.html";
 
         token.get().usedToken();
-        tokenRepository.save(token.get());
+        tokenService.save(token.get());
 
         return "/AuthSuccess.html";
     }
@@ -98,6 +97,11 @@ public class UserService {
         log.info("user <" + user.getName() + ">'password is updated");
     }
 
+    @Transactional
+    public User findWriter(Long userId) {
+        return userRepository.findByUserId(userId).orElseThrow(NotExistWriterException::new);
+    }
+
     private void isAlreadyExistName(String name) {
         if(userRepository.findByName(name).isPresent()){
             log.error("AlreadyExistNameException: name <" + name + "> is already exist.");
@@ -120,7 +124,7 @@ public class UserService {
     }
 
     private void isVerificationToken(String tokenId) {
-        Token token = tokenRepository.findById(tokenId).orElseThrow(InvalidTokenException::new);
+        Token token = tokenService.find(tokenId).orElseThrow(InvalidTokenException::new);
         if(!token.isVerification()) {
             log.error("InvalidTokenException: invalid token");
             throw new InvalidTokenException();
