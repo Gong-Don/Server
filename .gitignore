@@ -9,6 +9,7 @@ build/
 !**/src/test/**/build/
 src/main/resources/application.properties
 src/main/resources/application.yaml
+src/main/java/com/example/gongdon/user/domain/UniversityMap.java
 
 ### IntelliJ IDEA ###
 .idea
