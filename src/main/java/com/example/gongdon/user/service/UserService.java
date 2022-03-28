@@ -25,6 +25,7 @@ public class UserService {
 
     @Transactional
     public void signUp(SignupRequest request) {
+        log.info("signUp(), email : {}", request.getEmail());
 
         // DB에 해당 Email 을 가진 사용자 조회
         isAlreadyExistEmail(request.getEmail());
@@ -39,6 +40,7 @@ public class UserService {
 
     @Transactional
     public SigninResponse signIn(SigninRequest request) {
+        log.info("signIn(), email : {}", request.getEmail());
 
         // DB에 해당 Email 을 가진 사용자 조회
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(NotExistUserException::new);
@@ -50,6 +52,7 @@ public class UserService {
 
     @Transactional
     public EmailAuthResponse emailAuth(EmailAuthRequest request) {
+        log.info("emailAuth(), email : {}", request.getEmail());
 
         // DB에 해당 Email 을 가진 사용자 조회
         isAlreadyExistEmail(request.getEmail());
@@ -59,6 +62,7 @@ public class UserService {
 
     @Transactional
     public String confirmEmail(String tokenId) {
+        log.info("confirmEmail(), tokenId : {}", tokenId);
 
         // 사용자가 이메일로 보내진 링크를 클릭했을때 토큰의 유효성을 검사한후 결과 리턴
         Optional<Token> token = tokenService.find(tokenId);
@@ -74,6 +78,7 @@ public class UserService {
 
     @Transactional
     public void modifyName(UpdateNameRequest request) {
+        log.info("modifyName(), userId : {}, name : {}", request.getUserId(), request.getName());
 
         // DB에 해당 Name 을 가진 사용자 조회
         isAlreadyExistName(request.getName());
@@ -87,6 +92,7 @@ public class UserService {
 
     @Transactional
     public void modifyPassword(UpdatePasswordRequest request) {
+        log.info("modifyPassword(), userId : {}", request.getUserId());
 
         User user = userRepository.findByUserId(request.getUserId()).orElseThrow(NotExistUserException::new);
 

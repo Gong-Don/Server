@@ -36,7 +36,7 @@ public class PostService {
 
         User user = userService.findWriter(request.getWrtId());
 
-        log.info("Post 생성 요청, 사용자 이름 : {}", user.getName());
+        log.info("create(), username : {}", user.getName());
 
         Post post = new Post(request.getWrtId(), user.getName(), request.getCategory(), request.getTitle(), request.getContent(), request.getPrice());
 
@@ -47,7 +47,7 @@ public class PostService {
 
     @Transactional
     public void delete(Long postId) {
-        log.info("Post 삭제 요청");
+        log.info("delete(), postId : {}", postId);
 
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         postRepository.delete(post);
@@ -56,7 +56,7 @@ public class PostService {
     @Transactional
     public void update(Long postId, CreateRequest request) {
         // TODO TAG가 추가되면 여기서도 코드 추가
-        log.info("Post 수정 요청");
+        log.info("update(), postId : {}", postId);
 
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
         postRepository.save(post.update(request.getCategory(), request.getTitle(), request.getContent(), request.getPrice()));
@@ -64,14 +64,12 @@ public class PostService {
 
     @Transactional
     public List<Post> lists() {
-        log.info("Post 보기 요청");
-
         return postRepository.getPosts();
     }
 
     @Transactional
     public DetailResponse detail(Long postId) {
-        log.info("특정 Post 보기 요청");
+        log.info("detail(), postId : {}", postId);
 
         if (!postRepository.existsById(postId)) throw new PostNotFoundException();
 
@@ -80,14 +78,14 @@ public class PostService {
 
     @Transactional
     public List<Post> titleLists(String title) {
-        log.info("Post 제목 검색 요청");
+        log.info("titleLists(), title : {}", title);
 
         return postRepository.getPostsByTitle(title);
     }
 
     @Transactional
     public List<Post> categoryLists(Category category) {
-        log.info("Post 카테고리 검색 요청");
+        log.info("categoryLists(), category : {}", category);
 
         return postRepository.findPostByCategory(category, Sort.by(Sort.Direction.DESC, "date"));
     }
