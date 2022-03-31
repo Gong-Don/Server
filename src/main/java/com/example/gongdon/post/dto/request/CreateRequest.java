@@ -28,4 +28,7 @@ public class CreateRequest {
 
     @Nullable
     private List<String> tags;
+
+    @Nullable
+    private List<String> fileUrls;
 }

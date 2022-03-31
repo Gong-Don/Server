@@ -2,13 +2,13 @@ package com.example.gongdon.post.service;
 
 import com.example.gongdon.belongto.service.BelongToService;
 import com.example.gongdon.errors.exception.PostNotFoundException;
+import com.example.gongdon.file.service.FileService;
 import com.example.gongdon.post.domain.Category;
 import com.example.gongdon.post.domain.Post;
 import com.example.gongdon.post.dto.request.CreateRequest;
 import com.example.gongdon.post.dto.response.DetailResponse;
 import com.example.gongdon.post.repository.PostRepository;
 import com.example.gongdon.belongto.domain.BelongTo;
-import com.example.gongdon.belongto.repository.BelongToRepository;
 import com.example.gongdon.tag.service.TagService;
 import com.example.gongdon.user.domain.User;
 import com.example.gongdon.user.service.UserService;
@@ -30,6 +30,7 @@ public class PostService {
     private final UserService userService;
     private final TagService tagService;
     private final BelongToService belongToService;
+    private final FileService fileService;
 
     @Transactional
     public void create(CreateRequest request) {
@@ -41,6 +42,8 @@ public class PostService {
         Post post = new Post(request.getWrtId(), user.getName(), request.getCategory(), request.getTitle(), request.getContent(), request.getPrice());
 
         postRepository.save(post);
+
+        updateFile(request, post);
 
         tagService.create(request.getTags(), post);
     }
@@ -55,7 +58,7 @@ public class PostService {
 
     @Transactional
     public void update(Long postId, CreateRequest request) {
-        // TODO TAG가 추가되면 여기서도 코드 추가
+        // TODO TAG & File에 대해서 Cascade 옵션을 추가해 수정코드 작성
         log.info("update(), postId : {}", postId);
 
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
@@ -102,5 +105,19 @@ public class PostService {
             tags.add(belongTo.getTag().getName());
 
         return tags;
+    }
+
+    private void updateFile(CreateRequest request, Post post) {
+        if (request.getFileUrls() != null) {
+            log.info("postId= {} update files", post.getPostId());
+            List<String> urls = new ArrayList<>();
+
+            for (String fileUrl : request.getFileUrls()) {
+                fileUrl = fileService.update(fileUrl, "post/" + post.getPostId() + "/");
+                urls.add(fileUrl);
+            }
+
+            post.setFileUrls(urls);
+        }
     }
 }
