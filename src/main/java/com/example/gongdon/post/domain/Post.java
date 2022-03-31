@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @Entity
@@ -46,6 +47,9 @@ public class Post {
     // 외주 매칭이 완료되면, status(상태)를 TRUE로 변경
     private boolean matchingStatus = false;
 
+    @ElementCollection
+    private List<String> fileUrls;
+
     public Post (Long wrtId, String wrtName, Category category, String title, String content, int price) {
         this.wrtId = wrtId;
         this.wrtName = wrtName;
@@ -74,5 +78,9 @@ public class Post {
         this.price = price;
 
         return this;
+    }
+
+    public void setFileUrls(List<String> fileUrls) {
+        this.fileUrls = fileUrls;
     }
 }

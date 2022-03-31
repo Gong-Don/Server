@@ -40,6 +40,9 @@ dependencies {
 	// querydsl
 	implementation 'com.querydsl:querydsl-jpa'
 	implementation 'com.querydsl:querydsl-apt'
+
+	//aws
+	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.0'
 }
 
 tasks.named('test') {
