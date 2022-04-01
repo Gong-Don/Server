@@ -48,6 +48,9 @@ public class DetailResponse {
     @NotNull
     private List<String> tags;
 
+    @NotNull
+    private List<String> urls;
+
     public DetailResponse(Post post, List<String> tags) {
         this.wrtId = post.getWrtId();
         this.wrtName = post.getWrtName();
@@ -58,5 +61,6 @@ public class DetailResponse {
         this.likeCnt = post.getLikeCnt();
         this.date = post.getDate();
         this.tags = tags;
+        this.urls = post.getFileUrls();
     }
 }
