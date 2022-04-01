@@ -1,9 +1,7 @@
 package com.example.gongdon.post.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -11,12 +9,10 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@AllArgsConstructor
-@Entity
-@EntityListeners(AuditingEntityListener.class)
 @Getter
-@Setter
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
+@Entity
 public class Post {
 
     @Id
@@ -57,6 +53,19 @@ public class Post {
         this.title = title;
         this.content = content;
         this.price = price;
+    }
+
+    public Post(Long postId, Long wrtId, String wrtName, Category category, String title, String content, int price, int likeCnt, LocalDateTime date, boolean matchingStatus) {
+        this.postId = postId;
+        this.wrtId = wrtId;
+        this.wrtName = wrtName;
+        this.category = category;
+        this.title = title;
+        this.content = content;
+        this.price = price;
+        this.likeCnt = likeCnt;
+        this.date = date;
+        this.matchingStatus = matchingStatus;
     }
 
     public void matchingComplete() {
