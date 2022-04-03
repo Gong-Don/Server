@@ -10,7 +10,9 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -42,9 +44,9 @@ public class PostController {
     }
 
     @ApiOperation(value="글 등록", notes="성공 시 code와 message 반환")
-    @PostMapping()
-    public SuccessResponse postAdd(@RequestBody @Valid CreateRequest request) {
-        postService.create(request);
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public SuccessResponse postAdd(@RequestPart @Valid CreateRequest request, @RequestPart(required = false) List<MultipartFile> files) {
+        postService.create(request, files);
 
         return SuccessResponse.of(HttpStatus.OK, "글이 정상적으로 등록되었습니다.");
     }

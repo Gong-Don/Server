@@ -1,5 +1,6 @@
 package com.example.gongdon.post.domain;
 
+import com.example.gongdon.file.domain.File;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -7,6 +8,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -43,8 +45,13 @@ public class Post {
     // 외주 매칭이 완료되면, status(상태)를 TRUE로 변경
     private boolean matchingStatus = false;
 
-    @ElementCollection
-    private List<String> fileUrls;
+    @OneToMany(
+            mappedBy = "post",
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+            orphanRemoval = true
+    )
+    private List<File> files = new ArrayList<>();
+
 
     public Post (Long wrtId, String wrtName, Category category, String title, String content, int price) {
         this.wrtId = wrtId;
@@ -89,7 +96,12 @@ public class Post {
         return this;
     }
 
-    public void setFileUrls(List<String> fileUrls) {
-        this.fileUrls = fileUrls;
+    public void addFile(File file) {
+        this.files.add(file);
+
+        // 게시글에 파일이 저장되어있지 않은 경우
+        if(file.getPost() != this)
+            // 파일 저장
+            file.setPost(this);
     }
 }
