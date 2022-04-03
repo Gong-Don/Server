@@ -1,5 +1,7 @@
 package com.example.gongdon.post.dto.response;
 
+import com.example.gongdon.file.domain.File;
+import com.example.gongdon.file.dto.Detail;
 import com.example.gongdon.post.domain.Category;
 import com.example.gongdon.post.domain.Post;
 import lombok.Data;
@@ -12,6 +14,7 @@ import javax.persistence.Lob;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -49,7 +52,7 @@ public class DetailResponse {
     private List<String> tags;
 
     @NotNull
-    private List<String> urls;
+    private List<Detail> files = new ArrayList<>();
 
     public DetailResponse(Post post, List<String> tags) {
         this.wrtId = post.getWrtId();
@@ -61,6 +64,8 @@ public class DetailResponse {
         this.likeCnt = post.getLikeCnt();
         this.date = post.getDate();
         this.tags = tags;
-        this.urls = post.getFileUrls();
+
+        for(File file : post.getFiles())
+            this.files.add(new Detail(file.getName(), file.getUrl()));
     }
 }

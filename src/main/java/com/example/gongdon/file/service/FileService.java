@@ -32,9 +32,9 @@ public class FileService {
     public String s3Url;
 
     @Transactional
-    public String upload(MultipartFile multipartFile) throws IOException {
+    public String upload(MultipartFile multipartFile, String dir) {
         File uploadFile = convert(multipartFile).orElseThrow(()->new IllegalArgumentException("error: MultipartFile -> File convert fail..."));
-        return upload(uploadFile, "temp");
+        return upload(uploadFile, dir);
     }
 
     @Transactional
@@ -91,19 +91,23 @@ public class FileService {
     }
 
     // Local 에 파일 업로드 하기
-    private Optional<File> convert(MultipartFile file) throws IOException {
+    private Optional<File> convert(MultipartFile file) {
         File convertFile = new File("file" + file.getOriginalFilename());
         log.info("original name: " + file.getOriginalFilename());
 
-        // 바로 위에서 지정한 경로에 File 이 생성됨
-        if (convertFile.createNewFile()) {
-            // 경로가 잘못되었다면 생성 불가능
-            try (FileOutputStream fos = new FileOutputStream(convertFile)) {
-                // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
-                fos.write(file.getBytes());
+        try {
+            // 바로 위에서 지정한 경로에 File 이 생성됨
+            if (convertFile.createNewFile()) {
+                // 경로가 잘못되었다면 생성 불가능
+                try (FileOutputStream fos = new FileOutputStream(convertFile)) {
+                    // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
+                    fos.write(file.getBytes());
+                }
+                log.info("file convert success");
+                return Optional.of(convertFile);
             }
-            log.info("file convert success");
-            return Optional.of(convertFile);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         log.info("file convert failed");
         return Optional.empty();

@@ -21,7 +21,7 @@ public class FileController {
     @ApiOperation(value = "파일 추가", notes = "파일을 추가하면 해당 파일을 S3에 추가한 후 해당 파일의 URL 반환")
     @PostMapping("")
     public String fileAdd(@RequestParam("file") MultipartFile multipartFile) throws IOException {
-        return fileService.upload(multipartFile);
+        return fileService.upload(multipartFile, "temp");
     }
 
     @ApiOperation(value = "파일 삭제", notes = "해당 url 의 파일을 S3에서 제거")

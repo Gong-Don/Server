@@ -2,6 +2,7 @@ package com.example.gongdon.post.service;
 
 import com.example.gongdon.belongto.service.BelongToService;
 import com.example.gongdon.errors.exception.PostNotFoundException;
+import com.example.gongdon.file.domain.File;
 import com.example.gongdon.file.service.FileService;
 import com.example.gongdon.post.domain.Category;
 import com.example.gongdon.post.domain.Post;
@@ -16,8 +17,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +36,7 @@ public class PostService {
     private final FileService fileService;
 
     @Transactional
-    public void create(CreateRequest request) {
+    public void create(CreateRequest request, List<MultipartFile> files) {
 
         User user = userService.findWriter(request.getWrtId());
 
@@ -43,7 +46,7 @@ public class PostService {
 
         postRepository.save(post);
 
-        updateFile(request, post);
+        uploadFiles(files, post);
 
         tagService.create(request.getTags(), post);
     }
@@ -107,17 +110,12 @@ public class PostService {
         return tags;
     }
 
-    private void updateFile(CreateRequest request, Post post) {
-        if (request.getFileUrls() != null) {
+    private void uploadFiles(List<MultipartFile> files, Post post) {
+        if (files != null && !files.isEmpty()) {
             log.info("postId= {} update files", post.getPostId());
-            List<String> urls = new ArrayList<>();
 
-            for (String fileUrl : request.getFileUrls()) {
-                fileUrl = fileService.update(fileUrl, "post/" + post.getPostId() + "/");
-                urls.add(fileUrl);
-            }
-
-            post.setFileUrls(urls);
+            for (MultipartFile file : files)
+                post.addFile(new File(file.getName(), fileService.upload(file, "post/" + post.getPostId())));
         }
     }
 }
