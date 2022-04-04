@@ -7,6 +7,7 @@ import com.example.gongdon.tag.domain.Tag;
 import com.example.gongdon.tag.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,11 @@ public class TagService {
     }
 
     @Transactional
+    public void delete(List<Tag> lists) {
+        tagRepository.deleteAll(lists);
+    }
+
+    @Transactional
     public void create(List<String> tags, Post post) {
         if (tags != null  && !tags.isEmpty())
             for (String tagName : tags) {
@@ -40,7 +46,7 @@ public class TagService {
             }
     }
 
-    private Map<String, Integer> getTagMap() {
+    public Map<String, Integer> getTagMap() {
         Map<String, Integer> tags = new HashMap<>();
 
         for (BelongTo belongTo : belongToService.findAll())

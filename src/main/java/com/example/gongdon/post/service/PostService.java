@@ -56,7 +56,8 @@ public class PostService {
         log.info("delete(), postId : {}", postId);
 
         Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
-        postRepository.delete(post);
+        tagService.delete(belongToService.deleteTags(post));
+        // postRepository.delete(post);
     }
 
     @Transactional
